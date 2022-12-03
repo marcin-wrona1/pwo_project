@@ -65,16 +65,6 @@ public class MainClass {
         );
 
         // operacje plikowe
-        // ilość parametrów: jedna lub dwie ścieżki, zależnie od operacji
-        opts.addOption(
-            Option.builder("d")
-                .longOpt("diff")
-                .required(false)
-                .desc("Porównaj statystyki dwóch plików")
-                .hasArgs()
-                .numberOfArgs(2)
-                .build()
-        );
         opts.addOption(
             Option.builder("C")
                 .longOpt("content")
@@ -172,30 +162,7 @@ public class MainClass {
             System.exit(0);
         }
 
-        // 2. porównianie dwóch plików
-        if (cmd.hasOption("d")) {
-            // za pomocą opcji 'l', 'w', 'c' wybieramy statystyki do porównania
-            List<String> nonconflicting_opts = Arrays.asList(new String[]{ "l", "w", "c" });
-
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
-                .stream()
-                .filter(opt -> !nonconflicting_opts.contains(opt))
-                .toArray();
-            check_opt_conflict(cmd, "d", conflicting_ops);
-
-            String[] filenames = cmd.getOptionValues("d");
-            // TODO: Implement
-            System.out.println("Wybrano opcję porównania plików; ścieżki: " + filenames[0] + " oraz: " + filenames[1]);
-            for (String opt : nonconflicting_opts) {
-                if (cmd.hasOption(opt)) {
-                    System.out.println("Włączono proównanie -" + opt);
-                }
-            }
-
-            System.exit(0);
-        }
-
-        // 3. operacje plikowe (z jednym lub dwoma parametrami bezpośrednio
+        // 2. operacje plikowe (z jednym lub dwoma parametrami bezpośrednio
         //    po parametrze wybierającym operację)
         if (cmd.hasOption("C")) {
             String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
@@ -244,7 +211,7 @@ public class MainClass {
             System.exit(0);
         }
 
-        // 4. obliczanie statystyk - ilość parametrów dowolna
+        // 3. obliczanie statystyk - ilość parametrów dowolna
         if (cmd.hasOption("s")) {
             String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
                 .stream()
