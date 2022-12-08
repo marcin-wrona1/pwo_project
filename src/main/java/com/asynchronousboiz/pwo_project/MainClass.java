@@ -19,8 +19,15 @@ import org.apache.commons.cli.HelpFormatter;
  */
 public class MainClass {
     private static final String[] all_actions = {
+        "h",
+        "s",
         "l",
+        "w",
         "c",
+        "C",
+        "b",
+        "m",
+        "i"
     };
 
     private static Options getOptions() {
