@@ -161,11 +161,11 @@ public class MainClass {
 
         // 1. interaktywny interfejs
         if (cmd.hasOption("i")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                 // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("i"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "i", conflicting_ops);
 
             System.out.println("Uruchamianie interaktywnego interfejsu...");
@@ -176,11 +176,11 @@ public class MainClass {
         // 2. operacje plikowe (z jednym lub dwoma parametrami bezpośrednio
         //    po parametrze wybierającym operację)
         if (cmd.hasOption("C")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("C"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "C", conflicting_ops);
 
             if (args.length < 1) {
@@ -220,11 +220,11 @@ public class MainClass {
         }
 
         if (cmd.hasOption("b")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("b"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "b", conflicting_ops);
 
             String[] filenames = cmd.getOptionValues("b");
@@ -242,11 +242,11 @@ public class MainClass {
         }
 
         if (cmd.hasOption("m")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("m"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "m", conflicting_ops);
 
             String[] filenames = cmd.getOptionValues("m");
@@ -265,11 +265,11 @@ public class MainClass {
 
         // 3. obliczanie statystyk - ilość parametrów dowolna
         if (cmd.hasOption("s")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("s"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "s", conflicting_ops);
 
             if (args.length < 1) {
@@ -290,11 +290,11 @@ public class MainClass {
         }
 
         if (cmd.hasOption("l")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("l"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "l", conflicting_ops);
 
             if (args.length < 1) {
@@ -316,11 +316,11 @@ public class MainClass {
         }
 
         if (cmd.hasOption("w")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("w"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "w", conflicting_ops);
 
             if (args.length < 1) {
@@ -342,11 +342,11 @@ public class MainClass {
         }
 
         if (cmd.hasOption("c")) {
-            String[] conflicting_ops = (String[]) Arrays.asList(all_actions)
+            String[] conflicting_ops = Arrays.asList(all_actions)
                 .stream()
                     // wszystkie pozostałe opcje nie są dozwolone
                 .filter(opt -> !opt.equals("c"))
-                .toArray();
+                .toArray(String[]::new);
             check_opt_conflict(cmd, "c", conflicting_ops);
 
             if (args.length < 1) {
