@@ -61,4 +61,15 @@ public class FileStatsTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test metody lineCount, z klasy FileStats.
+     */
+    @Test
+    public void testLineCount() throws Exception {
+        System.out.println("FileStatsTest: Testowanie metody 'lineCount'");
+
+        long expResult = 9;
+        long result = FileStats.lineCount(testFilePath);
+        assertEquals(expResult, result);
+    }
 }
