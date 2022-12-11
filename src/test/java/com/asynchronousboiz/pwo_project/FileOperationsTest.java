@@ -10,6 +10,9 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  *
  * @author Krzysztof Zarębski
+ * @author Marcin Wrona
  */
 public class FileOperationsTest {
     private static final String PACKAGE_PATH = "com/asynchronousboiz/pwo_project";
@@ -31,6 +35,8 @@ public class FileOperationsTest {
     private String testDirPath;
     private String testFilePath;
 
+    private String testDirPath2;
+    
     public FileOperationsTest() {
     }
 
@@ -70,6 +76,14 @@ public class FileOperationsTest {
             OutputStream out = Files.newOutputStream(testFile);
             stream.transferTo(out);
             testFilePath = testFile.toAbsolutePath().normalize().toString();
+
+            Path testDir2 = Files.createTempDirectory("FileOperationsTest");
+            testDirPath2 = testDir2.toAbsolutePath().normalize().toString();
+
+            int i;
+            for (i = 0; i < 10; i++) {
+                Files.createFile(Paths.get(testDir2 + "/file" + i));
+            }
         } catch (IOException ex) {
             assert(false);
         }
@@ -115,4 +129,22 @@ public class FileOperationsTest {
         assertEquals(false, new File(testFilePath).exists());
     }
     
+    /**
+     * Test dla metody 'directoryContent', z klasy 'FileOperations'.
+     */
+    @Test
+    public void directoryContentTest() throws Exception {
+        List<Path> files = FileOperations.directoryContent(testDirPath2);
+
+        assertEquals(10, files.size());
+        Collections.sort(files);
+        int i;
+        for (i = 0; i < 10; i++) {
+            String targetPath = testDirPath2 + "/file" + i;
+            Path file = files.get(i);
+            assertNotEquals(null, file);
+            String path = file.toAbsolutePath().normalize().toString();
+            assertEquals(targetPath, path);
+        }
+    }
 }
