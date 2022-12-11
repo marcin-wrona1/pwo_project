@@ -60,4 +60,16 @@ public class FileStatsTest {
         long result = FileStats.characterCount(testFilePath);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test metody wordCount, z klasy FileStats.
+     */
+    @Test
+    public void testWordCount() throws Exception {
+        System.out.println("FileStatsTest: Testowanie metody 'wordCount'");
+
+        long expResult = 431;
+        long result = FileStats.wordCount(testFilePath);
+        assertEquals(expResult, result);
+    }
 }
