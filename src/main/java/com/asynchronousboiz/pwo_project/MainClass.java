@@ -48,7 +48,7 @@ public class MainClass {
             Option.builder("s")
                 .longOpt("size")
                 .required(false)
-                .desc("Wyświetl rozmiar pliku lub plików")
+                .desc("Wyświetl rozmiar pliku")
                 .hasArg()
                 .build()
         );
@@ -56,21 +56,21 @@ public class MainClass {
             Option.builder("l")
                 .longOpt("line-count")
                 .required(false)
-                .desc("Wyświetl ilość linii w pliku lub plikach")
+                .desc("Wyświetl ilość linii w pliku")
                 .build()
         );
         opts.addOption(
             Option.builder("w")
                 .longOpt("word-count")
                 .required(false)
-                .desc("Wyświetl ilość słów w pliku lub plikach")
+                .desc("Wyświetl ilość słów w pliku")
                 .build()
         );
         opts.addOption(
             Option.builder("c")
                 .longOpt("character-count")
                 .required(false)
-                .desc("Wyświetl ilość znaków w pliku lub plikach")
+                .desc("Wyświetl ilość znaków w pliku")
                 .build()
         );
 
