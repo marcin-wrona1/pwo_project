@@ -63,6 +63,9 @@ public class FileStats {
         BufferedReader br = Files.newBufferedReader(path);
         String line;
         while ((line = br.readLine()) != null) {
+            if (line.length() < 1) {
+                continue;
+            }
             String[] words = line.split(" ");
             ret += words.length;
         }
