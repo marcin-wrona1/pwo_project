@@ -1,5 +1,8 @@
 package com.asynchronousboiz.pwo_project;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +72,7 @@ public class MainClass {
             Option.builder("C")
                 .longOpt("content")
                 .required(false)
-                .desc("Wyświetl zawartość katalogu lub katalogów")
+                .desc("Wyświetl zawartość katalogu")
                 .build()
         );
         opts.addOption(
@@ -134,12 +137,13 @@ public class MainClass {
         formatter.printHelp("pwo_project", getOptions());
     }
 
-    public static void main (String[] argv) {
+    public static void main (String[] argv) throws IOException {
         final CommandLine cmd = getArgs(argv);
         if (cmd == null) {
             System.err.println("Podano nieprawidłowe parametry");
             System.exit(1);
         }
+        String[] args = cmd.getArgs();
 
         // Priorytetyzujemy parametry
 
@@ -157,8 +161,8 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "i", conflicting_ops);
 
-            // TODO: Implement
             System.out.println("Uruchamianie interaktywnego interfejsu...");
+            InteractiveMode.interactiveMain();
             System.exit(0);
         }
 
@@ -172,12 +176,39 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "C", conflicting_ops);
 
-            // TODO: Implement
-            System.out.println("Wybrano opcję wyświetlenia zawartości katalogu (katalogów):");
-            for (String dir : cmd.getArgs()) {
-                System.out.println("* " + dir);
+            if (args.length < 1) {
+                System.err.println("Nie podano katalogu do wyświetlenia");
+                System.exit(1);
             }
 
+            List<Path> content = null;
+            try {
+                content = FileOperations.directoryContent(args[0]);
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
+            }
+            
+            for (Path file : content) {
+                Path filename = file.getFileName();
+                if (filename == null) {
+                    continue;
+                }
+                String name = filename.toString();
+
+                String header = "[" + (
+                    Files.isSymbolicLink(file) ? "l"
+                    : Files.isDirectory(file) ? "d"
+                    : Files.isRegularFile(file) ? "f"
+                    : "?"
+                ) + "]";
+
+                System.out.println(header + " " + name);
+            }
+            
             System.exit(0);
         }
 
@@ -190,9 +221,16 @@ public class MainClass {
             check_opt_conflict(cmd, "b", conflicting_ops);
 
             String[] filenames = cmd.getOptionValues("b");
-            // TODO: Implement
-            System.out.println("Wybrano opcję kopiowania pliku: " + filenames[0] + " do: " + filenames[1]);
-
+            try {
+                FileOperations.copyFile(filenames[0], filenames[1]);
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
+            }
+            System.out.println("Plik został skopiowany");
             System.exit(0);
         }
 
@@ -205,9 +243,16 @@ public class MainClass {
             check_opt_conflict(cmd, "m", conflicting_ops);
 
             String[] filenames = cmd.getOptionValues("m");
-            // TODO: Implement
-            System.out.println("Wybrano opcję przeniesienia pliku: " + filenames[0] + " do: " + filenames[1]);
-
+            try {
+                FileOperations.moveFile(filenames[0], filenames[1]);
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
+            }
+            System.out.println("Plik został przeniesiony");
             System.exit(0);
         }
 
@@ -220,18 +265,20 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "s", conflicting_ops);
 
-            String[] filenames = cmd.getArgs();
-
-            // TODO: Implement
-            if (filenames.length == 1) {
-                System.out.println("Wybrano opcję wyświetlenia rozmiaru pliku: " + filenames[0]);
-            } else {
-                System.out.println("Wybrano opcję wyświetlenia rozmiarów plików:");
-                for (String filename : filenames) {
-                    System.out.println("* " + filename);
-                }
+            if (args.length < 1) {
+                System.err.println("Nie podano katalogu do wyświetlenia");
+                System.exit(1);
             }
 
+            try {
+                System.out.println(FileStats.fileSize(args[0]));
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
+            }
             System.exit(0);
         }
 
@@ -243,16 +290,19 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "l", conflicting_ops);
 
-            String[] filenames = cmd.getArgs();
+            if (args.length < 1) {
+                System.err.println("Nie podano katalogu do wyświetlenia");
+                System.exit(1);
+            }
 
-            // TODO: Implement
-            if (filenames.length == 1) {
-                System.out.println("Wybrano opcję wyświetlenia ilości linji w pliku: " + filenames[0]);
-            } else {
-                System.out.println("Wybrano opcję wyświetlenia ilości linji w plikach:");
-                for (String filename : filenames) {
-                    System.out.println("* " + filename);
-                }
+            try {
+                System.out.println(FileStats.lineCount(args[0]));
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
             }
 
             System.exit(0);
@@ -266,16 +316,19 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "w", conflicting_ops);
 
-            String[] filenames = cmd.getArgs();
+            if (args.length < 1) {
+                System.err.println("Nie podano katalogu do wyświetlenia");
+                System.exit(1);
+            }
 
-            // TODO: Implement
-            if (filenames.length == 1) {
-                System.out.println("Wybrano opcję wyświetlenia ilości słów w pliku: " + filenames[0]);
-            } else {
-                System.out.println("Wybrano opcję wyświetlenia ilości słów w plikach:");
-                for (String filename : filenames) {
-                    System.out.println("* " + filename);
-                }
+            try {
+                System.out.println(FileStats.wordCount(args[0]));
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
             }
 
             System.exit(0);
@@ -289,16 +342,19 @@ public class MainClass {
                 .toArray();
             check_opt_conflict(cmd, "c", conflicting_ops);
 
-            String[] filenames = cmd.getArgs();
+            if (args.length < 1) {
+                System.err.println("Nie podano katalogu do wyświetlenia");
+                System.exit(1);
+            }
 
-            // TODO: Implement
-            if (filenames.length == 1) {
-                System.out.println("Wybrano opcję wyświetlenia ilości znaków w pliku: " + filenames[0]);
-            } else {
-                System.out.println("Wybrano opcję wyświetlenia ilości znaków w plikach:");
-                for (String filename : filenames) {
-                    System.out.println("* " + filename);
-                }
+            try {
+                System.out.println(FileStats.characterCount(args[0]));
+            } catch (IllegalArgumentException ex) {
+                System.err.println("Podano nieprawidłowy parametr");
+                System.exit(1);
+            } catch (IOException ex) {
+                System.err.println("Błąd wejścia/wyjścia");
+                System.exit(1);
             }
 
             System.exit(0);
