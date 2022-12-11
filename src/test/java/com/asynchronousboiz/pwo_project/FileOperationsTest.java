@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -57,6 +58,7 @@ public class FileOperationsTest {
         List<Path> files = FileOperations.directoryContent(testDirPath);
 
         assertEquals(10, files.size());
+        Collections.sort(files);
         int i;
         for (i = 0; i < 10; i++) {
             String targetPath = testDirPath + "/file" + i;
