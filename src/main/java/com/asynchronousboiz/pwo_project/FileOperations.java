@@ -31,7 +31,9 @@ public class FileOperations {
             throw new IllegalArgumentException("Podano nieprawidłowy typ pliku");
         }
 
-        Stream<Path> paths = Files.walk(path, 1);
+        String parentPath = path.toAbsolutePath().normalize().toString();
+        Stream<Path> paths = Files.walk(path, 1)
+                .filter(it -> !parentPath.equals(it.toAbsolutePath().normalize().toString()));
         return paths.collect(Collectors.toList());
     }
 }
