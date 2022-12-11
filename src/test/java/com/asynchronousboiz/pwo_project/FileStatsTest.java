@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  *
  * @author Jakub Kozłowski
+ * @author Albert Strzyżewski
  */
 public class FileStatsTest {
     private static final String testFileName = "com/asynchronousboiz/pwo_project/FileStatsTest.txt";
@@ -70,6 +71,30 @@ public class FileStatsTest {
 
         long expResult = 9;
         long result = FileStats.lineCount(testFilePath);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test metody characterCount, z klasy FileStats.
+     */
+    @Test
+    public void testCharacterCount() throws Exception {
+        System.out.println("FileStatsTest: Testowanie metody 'characterCount'");
+
+        long expResult = 2927;
+        long result = FileStats.characterCount(testFilePath);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test metody wordCount, z klasy FileStats.
+     */
+    @Test
+    public void testWordCount() throws Exception {
+        System.out.println("FileStatsTest: Testowanie metody 'wordCount'");
+
+        long expResult = 431;
+        long result = FileStats.wordCount(testFilePath);
         assertEquals(expResult, result);
     }
 }
