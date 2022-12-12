@@ -134,13 +134,14 @@ public class FileOperationsTest {
      */
     @Test
     public void directoryContentTest() throws Exception {
+        String realPath = Paths.get(testDirPath2).toRealPath().toAbsolutePath().normalize().toString();
         List<Path> files = FileOperations.directoryContent(testDirPath2);
 
         assertEquals(10, files.size());
         Collections.sort(files);
         int i;
         for (i = 0; i < 10; i++) {
-            String targetPath = testDirPath2 + "/file" + i;
+            String targetPath = realPath + "/file" + i;
             Path file = files.get(i);
             assertNotEquals(null, file);
             String path = file.toAbsolutePath().normalize().toString();

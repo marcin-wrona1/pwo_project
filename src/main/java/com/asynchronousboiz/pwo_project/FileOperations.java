@@ -80,7 +80,7 @@ public class FileOperations {
             throw new IllegalArgumentException("Nie podano ścieżki");
         }
 
-        Path path = Paths.get(filepath);
+        Path path = Paths.get(filepath).toRealPath();
         if (!Files.isDirectory(path)) {
             throw new IllegalArgumentException("Podano nieprawidłowy typ pliku");
         }
